@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo – Trouble Ticket Form</title>
+  <style>
+    :root { --radius: 16px; }
+    * { box-sizing: border-box; }
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; background: #0b1020; color: #e6e8ef; }
+    .wrap { max-width: 720px; margin: 48px auto; padding: 0 16px; }
+    .card { background: #121934; border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,.35); overflow: hidden; }
+    .header { padding: 24px 24px 0 24px; }
+    h1 { margin: 0 0 8px 0; font-size: 26px; letter-spacing: .2px; }
+    p.sub { margin: 0 0 20px 0; opacity: .75; }
+    form { padding: 0 24px 24px; display: grid; gap: 20px; }
+    fieldset { margin: 0; padding: 18px; border: 1px solid rgba(255,255,255,.08); border-radius: calc(var(--radius) - 8px); }
+    legend { padding: 0 8px; font-weight: 600; opacity: .9; }
+    .row { display: grid; gap: 12px; }
+    .radio-group { display: grid; gap: 10px; }
+    .radio { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.06); border-radius: 12px; background: rgba(255,255,255,.02); }
+    .radio input { margin-top: 2px; }
+    .other-box { margin-left: 34px; }
+    label { cursor: pointer; }
+    .actions { display: flex; gap: 12px; justify-content: flex-end; padding: 0 0 22px; }
+    button { border: 0; border-radius: 999px; padding: 12px 18px; font-weight: 600; }
+    .primary { background: #6ea8ff; color: #0b1020; }
+    .ghost { background: transparent; color: #e6e8ef; border: 1px solid rgba(255,255,255,.12); }
+    input[type="text"], input[type="tel"] { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: #e6e8ef; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <h1>Trouble Ticket</h1>
+        <p class="sub">Fill in the details below to log a new issue.</p>
+      </div>
+
+      <form id="ticketForm" action="#" method="post" novalidate>
+        
+        <!-- Name -->
+        <div class="row">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" name="fullname" required placeholder="Enter your name">
+        </div>
+
+        <!-- Contact Number -->
+        <div class="row">
+          <label for="contact">Contact Number</label>
+          <input type="tel" id="contact" name="contact" required placeholder="Enter your phone number">
+        </div>
+
+        <!-- Issue Category -->
+        <fieldset>
+          <legend>Issue Category</legend>
+          <div class="radio-group" role="radiogroup" aria-label="Issue Category">
+            <label class="radio">
+              <input type="radio" name="category" value="hardware" required>
+              <span>Hardware</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="category" value="software">
+              <span>Software</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="category" value="network">
+              <span>Network</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="category" value="other" id="cat-other" aria-controls="other-text">
+              <span>Other</span>
+            </label>
+            <div class="other-box">
+              <label for="other-text" class="sr-only">Specify other</label>
+              <input type="text" id="other-text" name="category_other" placeholder="Please specify…" disabled>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Department -->
+        <fieldset>
+          <legend>Department</legend>
+          <div class="radio-group" role="radiogroup" aria-label="Department">
+            <label class="radio">
+              <input type="radio" name="department" value="Finance" required>
+              <span>Finance</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="department" value="Human Resources">
+              <span>Human Resources</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="department" value="Operations">
+              <span>Operations</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="department" value="Research &amp; Development">
+              <span>Research &amp; Development</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="reset" class="ghost">Reset</button>
+          <button type="submit" class="primary">Submit Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const catRadios = document.querySelectorAll('input[name="category"]');
+      const otherBox = document.getElementById('other-text');
+      
+      function syncOther() {
+        const isOther = Array.from(catRadios).some(r => r.checked && r.value === 'other');
+        otherBox.disabled = !isOther;
+        if (!isOther) otherBox.value = '';
+        otherBox.setAttribute('aria-disabled', String(!isOther));
+      }
+      catRadios.forEach(r => r.addEventListener('change', syncOther));
+      syncOther();
+
+      document.getElementById('ticketForm').addEventListener('submit', function(e){
+        e.preventDefault(); // prevent default form behavior
+        const selected = document.querySelector('input[name="category"]:checked');
+        if (selected && selected.value === 'other' && !otherBox.value.trim()) {
+          otherBox.focus();
+          alert('Please specify the category when selecting "Other".');
+          return;
+        }
+
+        // Replace page with success message
+        document.body.innerHTML = "<h1 style='font-family: Arial; text-align: center; margin-top: 20%; color:#333;'>Your ticket is successfully submitted</h1>";
+        document.body.style.background = "#fff";
+      });
+    })();
+  </script>
+</body>
+</html>
