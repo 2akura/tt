@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo – Trouble Ticket Form</title>
+  <title>Trouble Ticket – Form & Dashboard</title>
   <style>
     :root { --radius: 16px; }
     * { box-sizing: border-box; }
     body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; background: #0b1020; color: #e6e8ef; }
     .wrap { max-width: 720px; margin: 48px auto; padding: 0 16px; }
-    .card { background: #121934; border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,.35); overflow: hidden; }
+    .card { background: #121934; border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,.35); overflow: hidden; margin-bottom: 24px; }
     .header { padding: 24px 24px 0 24px; }
     h1 { margin: 0 0 8px 0; font-size: 26px; letter-spacing: .2px; }
     p.sub { margin: 0 0 20px 0; opacity: .75; }
@@ -27,114 +27,149 @@
     .primary { background: #6ea8ff; color: #0b1020; }
     .ghost { background: transparent; color: #e6e8ef; border: 1px solid rgba(255,255,255,.12); }
     input[type="text"], input[type="tel"] { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: #e6e8ef; }
+
+    /* Dashboard */
+    #dashboardPage { display: none; }
+    .ticket-card { background: #1a223d; padding: 16px; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,.08); }
+    .ticket-card h3 { margin: 0 0 6px; font-size: 18px; }
+    .ticket-card p { margin: 4px 0; font-size: 14px; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <div class="header">
-        <h1>Trouble Ticket</h1>
-        <p class="sub">Fill in the details below to log a new issue.</p>
-      </div>
 
-      <form id="ticketForm" action="#" method="post" novalidate>
-        
-        <!-- Name -->
-        <div class="row">
-          <label for="fullname">Full Name</label>
-          <input type="text" id="fullname" name="fullname" required placeholder="Enter your name">
+    <!-- Page 1: Form -->
+    <section id="formPage">
+      <div class="card">
+        <div class="header">
+          <h1>Trouble Ticket</h1>
+          <p class="sub">Fill in the details below to log a new issue.</p>
         </div>
 
-        <!-- Contact Number -->
-        <div class="row">
-          <label for="contact">Contact Number</label>
-          <input type="tel" id="contact" name="contact" required placeholder="Enter your phone number">
-        </div>
+        <form id="ticketForm" novalidate>
+          <!-- Name -->
+          <div class="row">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" name="fullname" required placeholder="Enter your name">
+          </div>
 
-        <!-- Issue Category -->
-        <fieldset>
-          <legend>Issue Category</legend>
-          <div class="radio-group" role="radiogroup" aria-label="Issue Category">
-            <label class="radio">
-              <input type="radio" name="category" value="hardware" required>
-              <span>Hardware</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="category" value="software">
-              <span>Software</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="category" value="network">
-              <span>Network</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="category" value="other" id="cat-other" aria-controls="other-text">
-              <span>Other</span>
-            </label>
-            <div class="other-box">
-              <label for="other-text" class="sr-only">Specify other</label>
-              <input type="text" id="other-text" name="category_other" placeholder="Please specify…" disabled>
+          <!-- Contact -->
+          <div class="row">
+            <label for="contact">Contact Number</label>
+            <input type="tel" id="contact" name="contact" required placeholder="Enter your phone number">
+          </div>
+
+          <!-- Issue Category -->
+          <fieldset>
+            <legend>Issue Category</legend>
+            <div class="radio-group">
+              <label class="radio"><input type="radio" name="category" value="Hardware" required> <span>Hardware</span></label>
+              <label class="radio"><input type="radio" name="category" value="Software"> <span>Software</span></label>
+              <label class="radio"><input type="radio" name="category" value="Network"> <span>Network</span></label>
+              <label class="radio"><input type="radio" name="category" value="Other" id="cat-other"> <span>Other</span></label>
+              <div class="other-box">
+                <input type="text" id="other-text" name="category_other" placeholder="Please specify…" disabled>
+              </div>
             </div>
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <!-- Department -->
-        <fieldset>
-          <legend>Department</legend>
-          <div class="radio-group" role="radiogroup" aria-label="Department">
-            <label class="radio">
-              <input type="radio" name="department" value="Finance" required>
-              <span>Finance</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="department" value="Human Resources">
-              <span>Human Resources</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="department" value="Operations">
-              <span>Operations</span>
-            </label>
-            <label class="radio">
-              <input type="radio" name="department" value="Research &amp; Development">
-              <span>Research &amp; Development</span>
-            </label>
-          </div>
-        </fieldset>
+          <!-- Department -->
+          <fieldset>
+            <legend>Department</legend>
+            <div class="radio-group">
+              <label class="radio"><input type="radio" name="department" value="Finance" required> <span>Finance</span></label>
+              <label class="radio"><input type="radio" name="department" value="HR"> <span>HR</span></label>
+              <label class="radio"><input type="radio" name="department" value="Operations"> <span>Operations</span></label>
+              <label class="radio"><input type="radio" name="department" value="R&D"> <span>R&D</span></label>
+            </div>
+          </fieldset>
 
-        <div class="actions">
-          <button type="reset" class="ghost">Reset</button>
-          <button type="submit" class="primary">Submit Ticket</button>
+          <div class="actions">
+            <button type="reset" class="ghost">Reset</button>
+            <button type="submit" class="primary">Submit Ticket</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Page 2: Dashboard -->
+    <section id="dashboardPage">
+      <div class="card">
+        <div class="header">
+          <h1>Submitted Tickets</h1>
+          <p class="sub">All logged issues appear here.</p>
         </div>
-      </form>
-    </div>
+        <div id="tickets" style="padding: 0 24px 24px;"></div>
+        <div class="actions">
+          <button id="backBtn" class="ghost">Back to Form</button>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
     (function(){
       const catRadios = document.querySelectorAll('input[name="category"]');
       const otherBox = document.getElementById('other-text');
-      
+      const form = document.getElementById('ticketForm');
+      const formPage = document.getElementById('formPage');
+      const dashboardPage = document.getElementById('dashboardPage');
+      const ticketsContainer = document.getElementById('tickets');
+      const backBtn = document.getElementById('backBtn');
+      const tickets = []; // memory store
+
       function syncOther() {
-        const isOther = Array.from(catRadios).some(r => r.checked && r.value === 'other');
+        const isOther = Array.from(catRadios).some(r => r.checked && r.value === 'Other');
         otherBox.disabled = !isOther;
         if (!isOther) otherBox.value = '';
-        otherBox.setAttribute('aria-disabled', String(!isOther));
       }
       catRadios.forEach(r => r.addEventListener('change', syncOther));
       syncOther();
 
-      document.getElementById('ticketForm').addEventListener('submit', function(e){
-        e.preventDefault(); // prevent default form behavior
-        const selected = document.querySelector('input[name="category"]:checked');
-        if (selected && selected.value === 'other' && !otherBox.value.trim()) {
-          otherBox.focus();
-          alert('Please specify the category when selecting "Other".');
-          return;
+      function renderTickets() {
+        ticketsContainer.innerHTML = "";
+        tickets.forEach((t, i) => {
+          const card = document.createElement("div");
+          card.className = "ticket-card";
+          card.innerHTML = `
+            <h3>Ticket #${i+1}</h3>
+            <p><strong>Name:</strong> ${t.fullname}</p>
+            <p><strong>Contact:</strong> ${t.contact}</p>
+            <p><strong>Category:</strong> ${t.category}</p>
+            <p><strong>Department:</strong> ${t.department}</p>
+          `;
+          ticketsContainer.appendChild(card);
+        });
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const data = new FormData(form);
+        let category = data.get("category");
+        if (category === "Other") {
+          category = data.get("category_other") || "Other";
         }
 
-        // Replace page with success message
-        document.body.innerHTML = "<h1 style='font-family: Arial; text-align: center; margin-top: 20%; color:#333;'>Your ticket is successfully submitted</h1>";
-        document.body.style.background = "#fff";
+        const ticket = {
+          fullname: data.get("fullname"),
+          contact: data.get("contact"),
+          category: category,
+          department: data.get("department"),
+        };
+
+        tickets.push(ticket);
+        form.reset();
+        syncOther();
+
+        renderTickets();
+        formPage.style.display = "none";
+        dashboardPage.style.display = "block";
+      });
+
+      backBtn.addEventListener("click", () => {
+        dashboardPage.style.display = "none";
+        formPage.style.display = "block";
       });
     })();
   </script>
